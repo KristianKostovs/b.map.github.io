@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <title>GDMap</title>
+    <style>
+        #container{
+            width:100%;
+            height:500px;
+
+        }
+        #back{
+            background:url("res/xk.jpg") repeat;
+
+        }
+        #search{
+            width:300px;
+            height:200px;
+            margin:50px;
+        }
+        #weather{
+            background-color:lightyellow;
+            width:150px;
+            height:170px;
+            opacity:0.7;
+        }
+        aside{
+
+        }
+        .h1{
+
+            opacity:0.5;
+        }
+
+    </style>
+</head>
+<body id="back">
+<div >
+    <div class="h1">
+        <h1 style="color:white" >AMap Application</h1>
+        <p style="color:white">(Hit:You can click the icons in map to  get more information)</p>
+        <h3 style="color:white">Other Information</h3>
+        <h5 style="color:white">Forecast example(北京)</h5>
+        <div id="forecast" style="color:white"></div>
+    </div>
+    <div id="container" ></div>
+    <aside >
+        <table border="2">
+            <!--<tr>
+                <video width="600px" height="500px" controls>
+                    <source src="res/zg.mp4" type="video/mp4">
+                </video>
+            </tr>-->
+            <tr>
+                <h5 style="color:white">GDP Information</h5>
+                <iframe src="http://data.eastmoney.com/cjsj/gdp.html" width="900px" height="500px"></iframe>
+            </tr>
+        </table>
+    </aside>
+</div>
+<!--<diV id="search">
+    <form>
+        <fieldset>
+            <legend>搜索</legend>
+            <input id="sear" type="text">
+            <button id="sear1">click</button>
+        </fieldset>
+    </form>
+</diV>-->
+
+<script src="https://webapi.amap.com/js/marker.js"></script>
+<script type="text/javascript" src="https://webapi.amap.com/demos/js/liteToolbar.js"></script>
+<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=dd3d9d9297ce395ec7bb4fd77a020067&plugin=AMap.Autocomplete,AMap.Weather"></script>
+<script>
+    var map = new AMap.Map('container', {
+        zoom:10,//级别
+        center: [116.397428, 39.90923],//中心点坐标
+        viewMode:'3D',//使用3D视图
+        mapStyle: 'amap://styles/macaron'//设置地图样式
+    });//创建一个新地图
+    //var toolBar=new AMap.ToolBar();//创建一个工具的实例
+    //map.plugin(toolBar);
+    function mark(){
+        var icon=new AMap.Icon({
+                size: new AMap.Size(30, 20),
+                image:"res/flag.jpg",
+                imageSize: new AMap.Size(30, 20)
+            }
+        );//北京的icon设置
+        var icon1=new AMap.Icon({
+            size: new AMap.Size(20, 30),
+            image:"res/wyb.jpg",
+            imageSize: new AMap.Size(20, 30)
+        });//河南icon的设置
+        var icon2=new AMap.Icon({
+            size: new AMap.Size(20, 30),
+            image:"res/xz.jpg",
+            imageSize: new AMap.Size(20, 30)
+        });//重庆的icon设置
+        var icon3=new AMap.Icon({
+            size: new AMap.Size(30, 20),
+            image:"res/bmy.jpg",
+            imageSize: new AMap.Size(30, 20)
+        });//西安的icon设置
+        var icon4=new AMap.Icon({
+            size: new AMap.Size(30, 20),
+            image:"res/wlmq.jpg",
+            imageSize: new AMap.Size(30, 20)
+        });//乌鲁木齐的icon设置
+        var infoWindow=new AMap.InfoWindow({
+                isCustom:true,
+                content:'<div><form action="http://www.nmc.cn/publish/forecast/ABJ/beijing.html"><button type="submit">北京天气</button></form>' +
+                    '<form action="https://www.phb123.com/shenghuo/meishi/23434.html"><button type="submit">北京美食</button></form>' +
+                    '</div>',
+
+            }
+        );
+        var infoWindow1=new AMap.InfoWindow({
+            isCustom:true,
+            content:'<div><form action="https://www.tianqi.com/luoyang/"><button type="submit">洛阳天气</button></form>' +
+                '<form action="http://life.tom.com/shcs/201907/1413902559.html"><button type="submit">洛阳美食</button></form>' +
+                '</div>'
+        });
+        var infoWindow2=new AMap.InfoWindow({
+            isCustom:true,
+            content:'<div><form action="https://www.tianqi.com/chongqing/"><button type="submit">重庆天气</button></form>' +
+                '<form action="https://www.phb123.com/shenghuo/meishi/32530.html"><button type="submit">重庆美食</button></form>' +
+                '</div>'
+        });
+        var infoWindow3=new AMap.InfoWindow({
+            isCustom:true,
+            content:'<div><form action="https://www.tianqi.com/xian/"><button type="submit">西安天气</button></form>' +
+                '<form action="https://www.phb123.com/shenghuo/meishi/32890.html"><button type="submit">西安美食</button></form>' +
+                '</div>'
+        });
+        var infoWindow4=new AMap.InfoWindow({
+            isCustom:true,
+            content:'<div><form action="https://www.tianqi.com/wulumuqixian/"><button type="submit">乌鲁木齐天气</button></form>' +
+                '<form action="https://www.phb123.com/shenghuo/meishi/34438.html"><button type="submit">乌鲁木齐美食</button></form>' +
+                '</div>'
+        });
+        var onMarkerClick  =  function(e) {
+            infoWindow.open(map, e.target.getPosition());//打开信息窗体
+            //e.target就是被点击的Marker
+        };
+        var onMarkerClick1=function (e) {
+            infoWindow1.open(map, e.target.getPosition());
+        };
+        var onMarkerClick2=function (e) {
+            infoWindow2.open(map, e.target.getPosition());
+        };
+        var onMarkerClick3=function (e) {
+            infoWindow3.open(map, e.target.getPosition());
+        };
+        var onMarkerClick4=function (e) {
+            infoWindow4.open(map, e.target.getPosition());
+        };
+        var marker = new AMap.Marker({
+            position: new AMap.LngLat(116.39, 39.9),   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
+            icon:icon,
+            title: '北京欢迎你~',
+            anchor:'bottom-left'
+        });
+        var marker1=new AMap.Marker({
+                position: new AMap.LngLat(113.317057,23.140397),   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
+                icon:icon1,
+                anchor:'bottom-left'
+            }
+        );
+        var marker2=new AMap.Marker({
+            position: new AMap.LngLat(106.550464,29.563761),
+            icon:icon2,
+            anchor:'bottom-left'
+        });
+        var marker3=new AMap.Marker({
+            position: new AMap.LngLat(108.939621,34.343147),
+            icon:icon3,
+            anchor:'bottom-left'
+        });
+        var marker4=new AMap.Marker({
+            position: new AMap.LngLat(87.616842,43.82539),
+            icon:icon4,
+            anchor:'bottom-left'
+        });
+        map.add(marker);
+        map.add(marker1);
+        map.add(marker2);
+        map.add(marker3);map.add(marker4);
+        map.setFitView();
+        marker.on('click',onMarkerClick);//绑定click事件,这是marker.on的函数功能
+        marker1.on('click',onMarkerClick1);
+        marker2.on('click',onMarkerClick2);
+        marker3.on('click',onMarkerClick3);
+        marker4.on('click',onMarkerClick4);
+    }
+    mark();
+    AMap.plugin('AMap.Autocomplete', function(){
+        // 实例化Autocomplete
+        var autoComplete= new AMap.Autocomplete({
+            input:"sear"
+        });
+        autoComplete.search('杭州市', function(status, result) {
+            // 搜索成功时，result即是对应的匹配数据
+            //console.log(result.lnglat.getLng(),result.lnglat.getLag());
+            map.setCenter(result.position);
+        });
+    });
+    AMap.plugin('AMap.Weather', function() {
+        //创建天气查询实例
+        var weather = new AMap.Weather();
+
+        //执行实时天气信息查询
+        weather.getLive('北京市', function(err, data) {
+            //console.log(err, data);
+            if(!err){
+                var str1 = [];
+                str1.push('<h5 >RealTime' + '</h5><hr>');
+                str1.push('<p style="font-size:12px">city：' + data.city + '</p>');
+                str1.push('<p style="font-size:12px">weather：' + data.weather + '</p>');
+                str1.push('<p style="font-size:12px">temperature：' + data.temperature + '℃</p>');
+                str1.push('<p style="font-size:12px">' + data.reportTime + '</p>');
+                var markerw2 = new AMap.Marker({
+                    position: new AMap.LngLat(116.39, 39.9) // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
+                });
+                var infoWinw2 = new AMap.InfoWindow({
+                    content: '<div id="weather">'+str1.join('')+'</div>',
+                    isCustom:true,
+                    offset: new AMap.Pixel(0, -40)
+                });
+                infoWinw2.open(map, markerw2.getPosition());
+                markerw2.on('click', function() {
+                    infoWinw2.open(map, markerw2.getPosition());
+                });
+            }
+        });
+        //未来4天天气预报
+        weather.getForecast('北京市', function(err, data) {
+            if (err) {return;}
+            var str = [];
+            for (var i = 0,dayWeather; i < data.forecasts.length; i++) {
+                dayWeather = data.forecasts[i];
+                str.push(dayWeather.date+dayWeather.dayWeather+ dayWeather.nightTemp + '~' + dayWeather.dayTemp + '℃');
+            }
+            document.getElementById('forecast').innerHTML = str.join('<br>');
+        });
+    });
+
+</script>
+
+</body>
+</html>
